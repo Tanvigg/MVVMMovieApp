@@ -52,7 +52,10 @@ class MovieDetailFragment : Fragment() {
 
     private fun fetchUserDetails() {
         vmMovies?.fetchUserDetails()?.observe(viewLifecycleOwner, Observer {
-            Log.d("doc",it.toString())
+            if(it.get(0).isLiked)
+                iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
+            else
+                iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
         })
     }
 
@@ -65,7 +68,7 @@ class MovieDetailFragment : Fragment() {
             R.id.iv_fav -> {
                 isFav = true
                 iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
-                vmMovies?.addId(id!!,title!!)
+                vmMovies?.addId(id!!,title!!,isFav)
             }
         }
     }
@@ -76,7 +79,6 @@ class MovieDetailFragment : Fragment() {
 
     private fun handleObserver() {
         vmMovies?.mldMovieDetailResponse?.observe(viewLifecycleOwner, mMovieDetailResponseObserver)
-        vmMovies?.mldFavMovieResponse?.observe(viewLifecycleOwner,mFavMovieObserver)
     }
 
     private val mMovieDetailResponseObserver = Observer<MovieDetailResponse> {
@@ -84,11 +86,5 @@ class MovieDetailFragment : Fragment() {
         Picasso.get().load(Constants.IMAGE_BASE_URL + it.poster_path).into(iv_titleImage)
         tv_title.setText(it.title)
         tv_overview.setText(it.overview)
-    }
-
-    private val mFavMovieObserver = Observer<Int> {
-
-
-
     }
 }

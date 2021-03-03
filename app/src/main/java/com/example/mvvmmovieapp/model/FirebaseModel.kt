@@ -47,9 +47,9 @@ class FirebaseModel {
             }
     }
 
-    fun uploadId(id:Int,title:String){
+    fun uploadId(id:Int,title:String,isFav:Boolean){
         currentUserId = auth.currentUser!!.uid
-        user = User(id,title)
+        user = User(id,title,isFav)
         db.collection("users").document(currentUserId).collection("Favourites").document(id.toString()).set(user).addOnSuccessListener {
             Log.e("FIREBASE MODEL", "successful")
         }

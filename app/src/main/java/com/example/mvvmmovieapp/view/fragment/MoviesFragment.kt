@@ -25,7 +25,6 @@ class MoviesFragment : Fragment() {
     private lateinit var mContext: Context
     private var list : List<Results>? =null
     private var adapter : MoviesAdapter? =null
-    private var favouritesList : ArrayList<Int>?= null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

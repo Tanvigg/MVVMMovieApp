@@ -1,6 +1,6 @@
 package com.example.mvvmmovieapp.model
 
-class User(var id:Int,var title:String) {
+data class User(var id : Int=0, var title:String="",var isLiked:Boolean = false) {
     override fun toString(): String {
         return super.toString()
     }

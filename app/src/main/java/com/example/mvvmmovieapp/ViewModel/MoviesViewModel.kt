@@ -71,9 +71,8 @@ class MoviesViewModel : ViewModel() {
         })
     }
 
-    fun addId(id:Int,title:String){
-        mldFavMovieResponse.value = id
-        firebaseModel.uploadId(id,title)
+    fun addId(id:Int,title:String,isFav:Boolean){
+        firebaseModel.uploadId(id,title,isFav)
     }
 
     fun fetchUserDetails() : LiveData<List<User>> {
@@ -85,10 +84,9 @@ class MoviesViewModel : ViewModel() {
 
               val userIdList:MutableList<User> = mutableListOf()
               for(doc in value!!){
-                  //val data = User(doc("id")!! ,doc.getString("title")!!)
                   val fetchdata = doc.toObject(User::class.java)
                   userIdList.add(fetchdata)
-                  Log.d("doc",userIdList.toString())
+                  Log.d("docs",userIdList.toString())
               }
               mldUserFavourites.value = userIdList
           })
