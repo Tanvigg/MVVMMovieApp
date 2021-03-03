@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#346464</color>
+    <color name="colorPrimaryDark">#183a4f</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="App_theme_color">#346464</color>
+    <color name="grey_40">#999999</color>
+    <color name="grey_60">#666666</color>
+    <color name="grey_80">#37474F</color>
+    <color name="grey_90">#263238</color>
+    <color name="Login_button_onClick_color">#3E7575</color>
+    <color name="six">#ededec</color>
+
+
+
+</resources>
