@@ -15,6 +15,7 @@ import com.example.mvvmmovieapp.ViewModel.MoviesViewModel
 import com.example.mvvmmovieapp.model.MovieDetailResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
+import java.lang.Exception
 
 
 class MovieDetailFragment : Fragment() {
@@ -51,12 +52,17 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun fetchUserDetails() {
-        vmMovies?.fetchUserDetails(id!!)?.observe(viewLifecycleOwner, Observer {
-            if(it[0].isLiked or it.isEmpty())
-                iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
-            else
-                iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
-        })
+            vmMovies?.fetchUserDetails(id!!)?.observe(viewLifecycleOwner, Observer {
+                try {
+                    if (it[0].isLiked)
+                        iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
+                    else
+                        iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
+
+                }catch (e:Exception){
+                    iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
+                }
+            })
     }
 
     private fun handleClickListener() {
