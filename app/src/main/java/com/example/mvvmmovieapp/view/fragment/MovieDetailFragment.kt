@@ -52,18 +52,20 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun fetchUserDetails() {
-            vmMovies?.fetchUserDetails(id!!)?.observe(viewLifecycleOwner, Observer {
-                try {
-                    if (it[0].isLiked)
-                        iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
-                    else
-                        iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
-
-                }catch (e:Exception){
+        vmMovies?.fetchUserDetails(id!!)?.observe(viewLifecycleOwner, Observer {
+            try {
+                if (it[0].isLiked or it.isEmpty())
+                    iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
+                else
                     iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
-                }
-            })
+            }catch (e:Exception){
+                iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
+
+            }
+        })
+
     }
+
 
     private fun handleClickListener() {
         iv_fav.setOnClickListener(mOnClickListener)

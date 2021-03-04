@@ -1,5 +1,7 @@
 package com.example.mvvmmovieapp.view.activity
 
+import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import com.example.mvvmmovieapp.R
+import com.example.mvvmmovieapp.Service.NotificationService
+import com.example.mvvmmovieapp.Service.RestartService
 import com.example.mvvmmovieapp.ViewModel.LoginViewModel
 import com.example.mvvmmovieapp.ViewModel.MoviesViewModel
 import com.example.mvvmmovieapp.view.fragment.MoviesFragment
@@ -19,14 +23,19 @@ import kotlinx.android.synthetic.main.activity_movies.*
 
 class MoviesActivity : AppCompatActivity() {
     private var vmMovies: MoviesViewModel? = null
+    lateinit var serviceIntent: Intent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
+
         setContentView(R.layout.activity_movies)
+
+        val notificationService = NotificationService()
+        serviceIntent = Intent(this, notificationService::class.java)
+        if (!isNotificationServiceRunning(notificationService::class.java)){
+            startService(serviceIntent)
+        }
         vmMovies = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Movies"
@@ -46,6 +55,19 @@ class MoviesActivity : AppCompatActivity() {
 
     }
 
+    private fun isNotificationServiceRunning(serviceClass: Class<out NotificationService>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+        for(service: ActivityManager.RunningServiceInfo in manager.getRunningServices(Int.MAX_VALUE)){
+            if (serviceClass.name == service.service.className) {
+                Log.d("this", "ServiceStatus: Running")
+                return true
+            }
+        }
+        Log.d("this", "ServiceStatus: Not Running")
+        return false
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.logout){
             vmMovies?.logout()
@@ -54,5 +76,15 @@ class MoviesActivity : AppCompatActivity() {
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+    override fun onDestroy() {
+//        stopService(serviceIntent)
+        val broadcastIntent = Intent()
+        broadcastIntent.action = "restartService"
+        broadcastIntent.setClass(this, RestartService::class.java)
+        this.sendBroadcast(broadcastIntent)
+        super.onDestroy()
     }
 }

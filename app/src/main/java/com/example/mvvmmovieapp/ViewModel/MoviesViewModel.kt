@@ -29,9 +29,6 @@ class MoviesViewModel : ViewModel() {
     var mldMovieDetailResponse = MutableLiveData<MovieDetailResponse>()
     var mldMovieDetailResponseError = MutableLiveData<String>()
 
-    //Fav Movie Live Data
-    var mldFavMovieResponse = MutableLiveData<Int>()
-
     //saved user favourites
     var mldUserFavourites : MutableLiveData<List<User>> = MutableLiveData()
 
