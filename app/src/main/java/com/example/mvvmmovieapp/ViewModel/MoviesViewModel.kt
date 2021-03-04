@@ -75,8 +75,8 @@ class MoviesViewModel : ViewModel() {
         firebaseModel.uploadId(id,title,isFav)
     }
 
-    fun fetchUserDetails() : LiveData<List<User>> {
-          firebaseModel.fetchUserData().addSnapshotListener(EventListener<QuerySnapshot> {value,e->
+    fun fetchUserDetails(id:Int) : LiveData<List<User>> {
+          firebaseModel.fetchUserData().whereEqualTo("id",id).addSnapshotListener(EventListener<QuerySnapshot> {value,e->
               if (e != null) {
                   Log.w("TAG", "listen:error", e)
                   return@EventListener

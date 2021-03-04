@@ -33,7 +33,6 @@ class MovieDetailFragment : Fragment() {
         mContext = this.context!!
         id = arguments?.getInt("id")
         title = arguments?.getString("title")
-        fetchUserDetails()
         mView = inflater.inflate(R.layout.fragment_movie_detail, container, false)
         return mView
     }
@@ -47,12 +46,13 @@ class MovieDetailFragment : Fragment() {
         vmMovies = ViewModelProviders.of(activity!!).get(MoviesViewModel::class.java)
         fetchMovieDetail()
         handleObserver()
+        fetchUserDetails()
         handleClickListener()
     }
 
     private fun fetchUserDetails() {
-        vmMovies?.fetchUserDetails()?.observe(viewLifecycleOwner, Observer {
-            if(it.get(0).isLiked)
+        vmMovies?.fetchUserDetails(id!!)?.observe(viewLifecycleOwner, Observer {
+            if(it[0].isLiked or it.isEmpty())
                 iv_fav.setBackgroundResource(R.drawable.ic_favorite_red_500_18dp)
             else
                 iv_fav.setBackgroundResource(R.drawable.ic_favorite_border_grey_500_18dp)
