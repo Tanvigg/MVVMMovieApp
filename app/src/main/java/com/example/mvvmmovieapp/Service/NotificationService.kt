@@ -31,6 +31,7 @@ class NotificationService : Service() {
 
     private lateinit var favRef: CollectionReference
     var mldUserFavourites: MutableLiveData<List<User>> = MutableLiveData()
+    private var counter = 0
 
 
     override fun onCreate() {
@@ -77,7 +78,7 @@ class NotificationService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startCustomForeground() {
         ObserveLike().observeForever {
-            if (it != null) {
+            if (it != null && counter >1) {
                 val NOTIFICATION_CHANNEL_ID = "messageNotification"
                 val channelName = "Message Notification"
                 val channel = NotificationChannel(
@@ -86,6 +87,7 @@ class NotificationService : Service() {
                     NotificationManager.IMPORTANCE_DEFAULT
                 )
                 channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+                channel.importance = NotificationManager.IMPORTANCE_HIGH
 
                 val appPendingIntent = PendingIntent.getActivity(
                     this,
@@ -103,7 +105,7 @@ class NotificationService : Service() {
                     .setContentTitle("NOTIFICATION")
                     .setContentText("Added to Favourites")
                     .setSmallIcon(R.mipmap.ic_launcher_round)
-                    .setPriority(NotificationManager.IMPORTANCE_DEFAULT)
+                    .setPriority(NotificationCompat.PRIORITY_MAX)
                     .setCategory(Notification.CATEGORY_MESSAGE)
                     .setContentIntent(appPendingIntent)
                     .setAutoCancel(true)
@@ -160,6 +162,7 @@ class NotificationService : Service() {
                     }
                 }
             }
+            counter++
             mldUserFavourites.value = userIdList
         }
         return mldUserFavourites
@@ -213,5 +216,6 @@ class NotificationService : Service() {
         notificationManager.notify(4, notification)
 
     }
+
 }
 
